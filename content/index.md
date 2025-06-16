@@ -1,3 +1,3 @@
 ---
-title: test
+title: nagox's blog
 ---
