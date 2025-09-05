@@ -64,12 +64,25 @@ Content-Type: application/json
 
 ## jwt 기반 인증 시 서명 검증 미흡
 
-개념
-j
+**개념**
+인증에 jwt 토큰 사용하는 경우, 토큰의 서명을 검증하지 않아 jwt의 role을 admin으로 바꿨을 때 관리자 권한을 부여하는 경우
+
+> 주의 - 단순히 서명을 제거하거나 none을 허용하는 등은 인증 단계에서 미흡한 것이라 A07에 속함
 
 
+**예시**
+- jwt의 구성
+```
+<헤더(header)>.<페이로드(payload)>.<서명(signature)>
+```
 
-
+- 페이로드 변조
+```
+eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiYWRtaW4ifQ.signature
+```
+1. eyJhbGciOiJIUzI1NiJ9 → `{ "alg": "HS256" }` (서명 알고리즘 정보)
+2. eyJyb2xlIjoiYWRtaW4ifQ → `{ "role": "admin" }` (payload, 권한 정보)
+3. signature → 일반적 서명
 
 
 
