@@ -37,21 +37,40 @@ Broken Access Control이란, 잘못된 접근 제어에 의한 취약점이다. 
 ![[context_control_white.png]]
 
 
+# 공격 기법 예시
+
+## IDOR
+
+**개념**
+어플리케이션 처리 로직에서 사용자 입력 값이 Object에 직접 참조되는 부분들이 모두 영향받는다. 일반적으로 ID, Username 등 식별 값이 포인트가 되며, 파라미터가 아닌 Static File 등에서도 식별 정보를 기반으로한 데이터 참조가 있는 경우 IDOR의 영향을 받는다.
+
+**예시**
+```
+GET /profile?id=<user_id> HTTP/1.1
+Host: vulnsite.com
+Cookie: session=user100
+```
+내 요청 패킷 캡쳐 후 (user_id가 10이라 가정) 해당 user_id를 11로 변조하였을 때 아래처럼 다른 사용자의 정보가 노출되면 공격에 성공
+```
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  "id": 101,
+  "username": "victim_user",
+  "email": "victim@example.com"
+}
+```
+
+
+
+
+
+
+
 
 
 여기부터 개발한 웹 서버의 코드를 예시로 접근 제어의 예시와 A01의 예시 설명
-
-
-
-
-![[Pasted image 20250905104500.png]]
-
-
-
-
-
-
-
 
 
 
