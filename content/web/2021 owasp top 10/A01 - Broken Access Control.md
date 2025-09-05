@@ -38,7 +38,7 @@ Broken Access Control이란, 잘못된 접근 제어에 의한 취약점이다. 
 
 
 # 공격 기법 예시
-
+---
 ## IDOR
 
 **개념**
@@ -84,14 +84,28 @@ eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiYWRtaW4ifQ.signature
 2. eyJyb2xlIjoiYWRtaW4ifQ → `{ "role": "admin" }` (payload, 권한 정보)
 3. signature → 일반적 서명
 
+## DELETE, PUT 등 API 접근제어 누락
+
+**개념**
+게시글 삭제 같은 것은 본인만 가능해야 하는데 단지 로그인만 확인하고 다른 것은 확인하지 않아서 HTTP 메서드로 요청해도 그대로 서버에서 받아들임
+
+**예시**
+```
+DELETE /api/posts/55 HTTP/1.1
+Host: vulnsite.com
+Cookie: session=user101   # 글 작성자가 아닌 사용자
+```
+```
+HTTP/1.1 200 OK
+{"ok":true}
+```
 
 
-
-
-
+# 프로젝트 적용 예시
+---
 
 여기부터 개발한 웹 서버의 코드를 예시로 접근 제어의 예시와 A01의 예시 설명
-
+실제 1-day도 
 
 
 
