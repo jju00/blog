@@ -44,6 +44,8 @@ Broken Access Control이란, 잘못된 접근 제어에 의한 취약점이다. 
 
 
 
+![[Pasted image 20250905104500.png]]
+
 
 
 
