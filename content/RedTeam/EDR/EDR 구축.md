@@ -147,6 +147,17 @@ cd elastic-agent-9.0.8-windows-x86_64
 
 
 
+```powershell
+iex(new-object net.webclient).downloadfile('https://github.com/Flangvik/SharpCollection/raw/master/NetFramework_4.5_Any/Rubeus.exe','C:\windows\temp\rubeus.exe')
+
+# DELETE the rubeus malware
+rm c:\windows\temp\rubeus.exe
+```
+실험 삼아서 AD 공격도구를 다운받는 명령어를 쳐봤다.
+![[image.avif]]
+잠시 후, 저렇게 Malware Alert라는 알람이 뜬다.
+
+
 
 
 
