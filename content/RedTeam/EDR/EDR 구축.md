@@ -125,10 +125,21 @@ sudo ./elastic-container.sh start
 - Fleet server URL 설정을 하였다. 이는 fleet 서버 url이 빈 상태라 Agent가 접속할 URL을 설정해주어야 하는 것이고, `https://ubuntuip:8220`으로 하였다. 포트가 8220인 이는, 도커를 띄울때의 디폴트 fleet이 8220이기 때문.
 ![[Pasted image 20251210045302.png]]
 ![[Pasted image 20251210045452.png]]
-이때, 저기서 2번 파워쉘 명령어는 치면 안 된다. 왜냐면 ubuntu에서 이미 Elastic stack을 설치해서 fleet이 있는 상탠데, 저거 치면 fleet을 windows
+이때, 저기서 2번 파워쉘 명령어는 치면 안 된다. 왜냐면 ubuntu에서 이미 Elastic stack을 설치해서 fleet이 있는 상탠데, 저거 치면 fleet을 windows에 또 설치하는 거기 때문.
+따라서, 저렇게 fleet server host url만 등록한 뒤, 다시 Add agent 창으로 돌아온다.
+
+- Add agent로 다시 돌아와서, Agent 설치를 마무리한다.
+![[Pasted image 20251210050530.png]]
+여기서 2번에 나오는 파워쉘 명령을 관리자로 실행해준다. 그리고 맨 마지막줄에는 `--insecure` 플래그를 넣어준다.
+```powershell
+$ProgressPreference = 'SilentlyContinue'
+Invoke-WebRequest -Uri https://artifacts.elastic.co/downloads/beats/elastic-agent/elastic-agent-9.0.8-windows-x86_64.zip -OutFile elastic-agent-9.0.8-windows-x86_64.zip 
+Expand-Archive .\elastic-agent-9.0.8-windows-x86_64.zip -DestinationPath .
+cd elastic-agent-9.0.8-windows-x86_64
+.\elastic-agent.exe install --url=https://192.168.200.136:8220 --enrollment-token=ZThLcUJKc0JYVDVSODRyQ0NHTGw6Wl9reVdwbEVJUEp0ZE1BZTVuVjk3UQ== --insecure
+```
 
 
-- 2번으로 가면 Elastic (EDR) Agent 를 설치해주는 명령어들이 나온다. Windows로 설정 후, 쉘 명령어를 통해 설치를 하였다.
 
 
 ### 레퍼런스
