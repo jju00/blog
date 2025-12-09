@@ -125,6 +125,8 @@ sudo ./elastic-container.sh start
 - Fleet server URL 설정을 하였다. 이는 fleet 서버 url이 빈 상태라 Agent가 접속할 URL을 설정해주어야 하는 것이고, `https://ubuntuip:8220`으로 하였다. 포트가 8220인 이는, 도커를 띄울때의 디폴트 fleet이 8220이기 때문.
 ![[Pasted image 20251210045302.png]]
 ![[Pasted image 20251210045452.png]]
+이때, 저기서 2번 파워쉘 명령어는 치면 안 된다. 왜냐면 ubuntu에서 이미 Elastic stack을 설치해서 fleet이 있는 상탠데, 저거 치면 fleet을 windows
+
 
 - 2번으로 가면 Elastic (EDR) Agent 를 설치해주는 명령어들이 나온다. Windows로 설정 후, 쉘 명령어를 통해 설치를 하였다.
 
