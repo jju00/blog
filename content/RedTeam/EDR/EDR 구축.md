@@ -112,6 +112,12 @@ sudo ./elastic-container.sh start
 - 이제, Windows 호스트에서 우분투 도커로 돌아가는 Kibana에 접속하여 아까 바꾼 비번으로 로그인하였다.
 ![[Pasted image 20251210044330.png]]
 
+- 왼쪽 메뉴 integrations -> Elastic Defend를 클릭 -> Add Endpoint and cloud security 선택
+![[Pasted image 20251210044650.png]]
+여기서 이름, 설명은 대충 입력해준다. 2번은 디폴트 상태로 냅둔다.
+![[Pasted image 20251210044848.png]]
+
+#### 4. Elastic Agent 설치 및 등록
 
 
 
