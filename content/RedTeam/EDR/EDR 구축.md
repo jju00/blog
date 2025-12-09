@@ -104,11 +104,15 @@ sudo vi .env
 ```bash
 sudo ./elastic-container.sh start
 ```
-설치가 성공적으로 끝나면 `https://localhost:5601`를 방문하라는 메시지와 함께 유저이름 + 비밀번호가 나타난다.
+설치가 성공적으로 끝나면 대충 Kibana가 실행되었다는 알람이 뜬다.
+![[Pasted image 20251210043910.png]]
 
 #### 3. Elastic Defend 추가 
 
-- 이제, Windows 호스트에서 우분투 도커로 돌아가는 Kibana에 접속하여 Agent와 Defend를 추해준다.
+- 이제, Windows 호스트에서 우분투 도커로 돌아가는 Kibana에 접속하여 아까 바꾼 비번으로 로그인하였다.
+![[Pasted image 20251210044330.png]]
+
+
 
 
 
