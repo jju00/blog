@@ -138,6 +138,15 @@ Expand-Archive .\elastic-agent-9.0.8-windows-x86_64.zip -DestinationPath .
 cd elastic-agent-9.0.8-windows-x86_64
 .\elastic-agent.exe install --url=https://192.168.200.136:8220 --enrollment-token=ZThLcUJKc0JYVDVSODRyQ0NHTGw6Wl9reVdwbEVJUEp0ZE1BZTVuVjk3UQ== --insecure
 ```
+![[Pasted image 20251210052706.png]]
+위와 같이 Agent, Defend가 모두 설치된 것을 확인
+<br>
+## 실행을 통한 EDR 탐지 확인 및 분석
+
+현재는 기본 탐지 룰 세팅이 활성화 되어 있는 상태이다.
+
+
+
 
 
 
