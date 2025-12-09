@@ -59,9 +59,9 @@
 
 #### 1. 가상머신 2대 준비
 
-
-
+![[Pasted image 20251210031917.png]]
 vmware pro로 진행하였고, 위의 사진과 같이 한 대는 windows 11 iso를 다운받아 windows victim host를 구성. 다른 한 대는 탐지결과를 분석하기 위한 Elastic Stack서버를 구성하였다. 
+
 
 
 
