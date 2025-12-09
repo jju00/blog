@@ -62,9 +62,53 @@
 ![[Pasted image 20251210031917.png]]
 vmware pro로 진행하였고, 위의 사진과 같이 한 대는 windows 11 iso를 다운받아 windows victim host를 구성. 다른 한 대는 탐지결과를 분석하기 위한 Elastic Stack서버를 구성하였다. 
 
+#### 2. Elastic Stack 설치
 
+- 의존성 패키지들을 먼저 설치해준다.
+```bash
+sudo apt update
+sudo apt install -y ca-certificates curl gnupg lsb-release
 
+sudo mkdir -p /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+  $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+  
+# 도커 설치
+sudo apt update
+sudo apt install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
 
+# 도커 그룹에 유저 추가 (현재 유저로도 docker 실행하게)
+sudo usermod -aG docker $USER
+newgrp docker
+```
+설치 확인
+![[Pasted image 20251210041727.png]]
+
+- https://github.com/peasead/elastic-container 프로젝트 클론 후 설치
+```bash
+cd ~
+git clone https://github.com/peasead/elastic-container.git
+cd elastic-container
+```
+
+- 비밀번호 변경
+```bash
+sudo vi .env
+```
+![[Pasted image 20251210042054.png]]
+여기 changme라 되어있는 2개를 변경
+
+- 스크립트 실행하여 약 10~15분간 도커 이미지를 다운받고, 도커를 실행한다. 즉, 도커를 통해 Elastic Stack 서버 (Elasticsearch + Kibana +Fleet Server) 를 띄우게 됨.
+```bash
+sudo ./elastic-container.sh start
+```
+설치가 성공적으로 끝나면 `https://localhost:5601`를 방문하라는 메시지와 함께 유저이름 + 비밀번호가 나타난다.
+
+#### 3. Elastic Defend 추가 
+
+- 이제, Windows 호스트에서 우분투 도커로 돌아가는 Kibana에 접속하여 Agent와 Defend를 추해준다.
 
 
 
