@@ -23,18 +23,42 @@
 
 > **Elastic EDR**: Elastic사에서 무료로 배포하는 자사의 EDR 솔루션. SIEM도 무료로 배포하고 있다.
 
+### 구성요소
+
+| 구성 요소            | 역할                                | 한 줄 요약               |
+| ---------------- | --------------------------------- | -------------------- |
+| *Elastic Defend* | 엔드포인트에서 위협 탐지, 차단, 로그·프로세스 이벤트 수집 | “EDR 엔진”             |
+| *Elastic Agent*  | Defend를 포함한 모든 Elastic 수집기 통합     | “Endpoint Installer” |
+| *Fleet Server*   | Agent들을 중앙에서 관리/정책 배포             | “MDR/관리 콘솔”          |
+| *Kibana App*     | EDR 탐지/분석/대시보드·타임라인               | “콘솔 UI”              |
+| *Elasticsearch*  | 이벤트 저장·인덱싱·검색                     | “데이터 레이크”            |
+1. 엔드포인트에 **Elastic Agent**가 설치됨
+2. 그 안에 활성화된 **Elastic Defend** 모듈이 실제 EDR 역할을 수행
+3. **Defend**는 프로세스/파일/메모리/네트워크 이벤트를 감시하고 악성 행위를 탐지, 차단
+4. 이렇게 수집된 이벤트와 경고는 **Fleet** 서버를 통해 중앙으로 전달됨
+5. 모든 데이터는 **Elasticsearch**에 저장·인덱싱됨
+6. **Kibana**의 Security 콘솔을 통해 이벤트 분석, 타임라인 시각화 등 UI에서 분석할 수 있다.
+
+
 ### 요구사항
 
 - VMware, ESXi, VirtualBox 등의 하이퍼바이저
 - Ubuntu, Debian, Kali Linux 등의 가상머신 1대
 - 윈도우 가상머신 1대
 
-|역할|OS|용도|
-|---|---|---|
-|Elastic Stack 서버|Ubuntu 22.04|Elasticsearch + Kibana + Fleet Server|
-|Victim PC|Windows 10/11|Elastic Agent 설치. EDR 테스트 대상|
+| 역할               | OS            | 구성 및 용도                               |
+| ---------------- | ------------- | ------------------------------------- |
+| Elastic Stack 서버 | Ubuntu 22.04  | Elasticsearch + Kibana + Fleet Server |
+| Victim PC        | Windows 10/11 | Elastic Agent 설치. EDR 테스트 대상          |
+
 
 ### 설치
+
+#### 1. 가상머신 2대 준비
+
+
+
+vmware pro로 진행하였고, 위의 사진과 같이 한 대는 windows 11 iso를 다운받아 windows victim host를 구성. 다른 한 대는 탐지결과를 분석하기 위한 Elastic Stack서버를 구성하였다. 
 
 
 
