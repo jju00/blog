@@ -18,7 +18,7 @@
 	- 프로세스 kill
 	- 엔드포인트 네트워크 격리
 	- 파일 격리
-
+<br>
 ## Elastic EDR
 
 > **Elastic EDR**: Elastic사에서 무료로 배포하는 자사의 EDR 솔루션. SIEM도 무료로 배포하고 있다.
@@ -38,8 +38,7 @@
 4. 이렇게 수집된 이벤트와 경고는 **Fleet** 서버를 통해 중앙으로 전달됨
 5. 모든 데이터는 **Elasticsearch**에 저장·인덱싱됨
 6. **Kibana**의 Security 콘솔을 통해 이벤트 분석, 타임라인 시각화 등 UI에서 분석할 수 있다.
-
-
+<br>
 ### 요구사항
 
 - VMware, ESXi, VirtualBox 등의 하이퍼바이저
@@ -50,9 +49,13 @@
 | ---------------- | ------------- | ------------------------------------- |
 | Elastic Stack 서버 | Ubuntu 22.04  | Elasticsearch + Kibana + Fleet Server |
 | Victim PC        | Windows 10/11 | Elastic Agent 설치. EDR 테스트 대상          |
-
-
+<br>
 ### 설치
+
+> *1. Elastic Cloud의 템플릿대로 설치*
+> *2. 로컬 내 가상머신에서 구성*
+>    
+> 설치 방법은 위와 같이 나눌 수 있는데, 추후 EDR evasion 등 추가 학습을 고려했을 때 로컬 가상머신 내 설치가 자유도 측면에서 이점이 있을 거 같아서 로컬 vm내 설치를 선택하였다.
 
 #### 1. 가상머신 2대 준비
 
