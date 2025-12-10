@@ -49,7 +49,7 @@
 | ---------------- | ------------- | ------------------------------------- |
 | Elastic Stack 서버 | Ubuntu 22.04  | Elasticsearch + Kibana + Fleet Server |
 | Victim PC        | Windows 10/11 | Elastic Agent 설치. EDR 테스트 대상          |
-<br>
+
 ### 설치
 
 > *1. Elastic Cloud의 템플릿대로 설치*
