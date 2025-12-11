@@ -50,19 +50,19 @@
 | Elastic Stack 서버 | Ubuntu 22.04  | Elasticsearch + Kibana + Fleet Server |
 | Victim PC        | Windows 10/11 | Elastic Agent 설치. EDR 테스트 대상          |
 
-### 설치
+## Elastic EDR 설치
 
 > *1. Elastic Cloud의 템플릿대로 설치*
 > *2. 로컬 내 가상머신에서 구성*
 >    
 > 설치 방법은 위와 같이 나눌 수 있는데, 추후 EDR evasion 등 추가 학습을 고려했을 때 로컬 가상머신 내 설치가 자유도 측면에서 이점이 있을 거 같아서 로컬 vm내 설치를 선택하였다.
 
-#### 1. 가상머신 2대 준비
+### 1. 가상머신 2대 준비
 
 ![[Pasted image 20251210031917.png]]
 vmware pro로 진행하였고, 위의 사진과 같이 한 대는 windows 11 iso를 다운받아 windows victim host를 구성. 다른 한 대는 탐지결과를 분석하기 위한 Elastic Stack서버를 구성하였다. 
 
-#### 2. Elastic Stack 설치
+### 2. Elastic Stack 설치
 
 - 의존성 패키지들을 먼저 설치해준다.
 ```bash
@@ -107,7 +107,7 @@ sudo ./elastic-container.sh start
 설치가 성공적으로 끝나면 대충 Kibana가 실행되었다는 알람이 뜬다.
 ![[Pasted image 20251210043910.png]]
 
-#### 3. Elastic Defend 추가 
+### 3. Elastic Defend 추가 
 
 - 이제, Windows 호스트에서 우분투 도커로 돌아가는 Kibana에 접속하여 아까 바꾼 비번으로 로그인하였다.
 ![[Pasted image 20251210044330.png]]
@@ -117,7 +117,7 @@ sudo ./elastic-container.sh start
 여기서 이름, 설명은 대충 입력해준다. 2번은 디폴트 상태로 냅둔다.
 ![[Pasted image 20251210044848.png]]
 
-#### 4. Elastic Agent 설치 및 등록
+### 4. Elastic Agent 설치 및 등록
 
 - Endpoint and Cloud Security 설치가 끝나면 `Add Elastic Agent to your hosts` 버튼을 눌러 Agent 생성과 설정을 진행한다.
 ![[image 2.png]]
