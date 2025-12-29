@@ -101,12 +101,36 @@ HTTP/1.1 200 OK
 ```
 
 
-# 프로젝트 적용 예시
+# 프로젝트 적용
 ---
+> thm 주소:
 
-여기부터 개발한 웹 서버의 코드를 예시로 접근 제어의 예시와 A01의 예시 설명
-실제 1-day도 덧붙임 필요?
+## Path Traversal
 
+```python
+@app.route('/download')
+def download():
+    path = request.args.get('path', '')
+    if not path:
+        return Response("Error: Missing 'path' parameter\nUsage: /download?path=<filepath>\n", status=400, mimetype='text/plain')
+
+    try:
+        ##########  A01 취약점 -> path traversal 취약점 (경로 검증 없음)
+        if os.path.exists(path):
+            # 파일인 경우 다운로드
+            if os.path.isfile(path):
+                return send_file(path, as_attachment=True, download_name=os.path.basename(path))
+            else:
+                return Response(f"Error: {path} is a directory, not a file\n", status=400, mimetype='text/plain')
+        else:
+            return Response(f"Error: File not found at path: {path}\n", status=404, mimetype='text/plain')
+
+    except Exception as e:
+        return Response(f"Error accessing file: {str(e)}\n", status=500, mimetype='text/plain'
+```
+- `/download?path=<filename>`를 통해 백업된 파일들을 다운로드할 수 있는 기능이 존재하는 flask 서비스
+- path 파라미터에 대한 검증이 없기 때문에 공격자는 임의의 파일 경로를 지정하여 서비스 내 다른 파일들에 접근할 수 있게 된다.
+- SSRF랑 결합하여 호스트 내부에서만 접근가능했던 해당 서비스에 접근하여 민감한 백업 파일들을 다운로드하도록 시나리오를 설계함 (ex. ssh deploy 키 등등)
 
 
 
