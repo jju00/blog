@@ -7,10 +7,7 @@
 
 
 # List of Mapped CWEs
-
-
-
-
+---
 ## CWE-209
 
 > **Generation of Error Message Containing Sensitive Information**
@@ -38,7 +35,7 @@ echo 'Check credentials in config file at: ', $Mysql_config_location, '\n';
 ```
 
 - 서버의 디렉터리 구조가 노출되는 경우 
-	-> `$ConfigDir = "/home/myprog/config"`와 같은 서버의 
+	-> `$ConfigDir = "/home/myprog/config"`와 같은 서버의 디렉터리 구조가 노출되는 경우 symbolic link following 취약점이나 path traversal 공격에 악용될 수 있다. 
 ```perl
 $ConfigDir = "/home/myprog/config";  
 $uname = GetUserInput("username");  
@@ -56,7 +53,7 @@ ExitError("Error: $file does not exist");
 
 
 # 프로젝트 적용
-
+---
 > thm 주소: 
 
 ```python
