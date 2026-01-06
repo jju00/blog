@@ -21,6 +21,8 @@ PORT   STATE SERVICE VERSION
 - 위에서 `page`파라미터는 lfi에 취약.
 ![[Pasted image 20251120075351.png]]
 
-- 이때, flag는 루트 아래에 있다고 함. 따라서 플래그 파일 이름은 `flag.txt`라는 생각해서 루트 아래에서 LFI로 읽기 성공. 약간 억지스러운 게싱인 거 같기도 함
+- 이때, flag는 루트 아래에 있다고 함. 
+![[Pasted image 20260106142253.png]]
+따라서, `/flag.txt`로 path traversal 후 플래그 파일 읽기 성공 
 ![[Pasted image 20251120081745.png]]
 
